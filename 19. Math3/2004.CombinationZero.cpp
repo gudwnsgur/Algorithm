@@ -7,7 +7,7 @@ int cnt5, cnt2;
 int main()
 {
     cin >> n >> m;
- 
+     
     for (long long i = 5; i <= n; i *= 5)
         cnt5 += n / i;
     for (long long i = 5; i <= n - m; i *= 5)
