@@ -1,10 +1,9 @@
 #include <iostream>
- 
 using namespace std;
  
 int n, m;
 int cnt5, cnt2;
- 
+
 int main()
 {
     cin >> n >> m;
