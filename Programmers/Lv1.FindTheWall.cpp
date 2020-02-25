@@ -1,43 +1,67 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <bitset>
+#include <math.h>
 using namespace std;
 
 vector<string> solution(int n, vector<int> arr1, vector<int> arr2) {
 
 	vector<string> answer;
 
-	int* binary1 = new int[n];
-	int* binary2 = new int[n];
+	bool* binary1 = new bool[n];
+	bool* binary2 = new bool[n];
+	bool* newBi = new bool[n];
+
 	for (int i = 0; i < n; i++) {
-		binary1[i] = 0;	binary2[i] = 0;
-	}
+		int first = arr1[i];
+		int second = arr2[i];
 
-	for (int k = 0; k < n; k++) {
-		int* newBi = new int[n];
+		for (int j = 0; j < n; j++) {
+			if (first >= pow(n - j - 1, 2)) {
+				binary1[j] = true;
+				first -= pow(n - j - 1, 2);
+			}
+			else { binary1[j] = false; }
+			if (second >= pow(n - j - 1, 2)) {
+				binary2[j] = true;
+				second -= pow(n - j - 1, 2);
+			}
+			else { binary2[j] = false; }
 
-
-		for (int i = 0; i < n; i++) {
-			newBi[i] = 0;
-
-			binary1[i] = 0;
-			binary2[i] = 0;
-
-			binary1[i] = arr1[k] % 2;
-			arr1[k] = arr1[k] / 2;
-
-			binary2[i] = arr2[k] % 2;
-			arr2[k] = arr2[k] / 2;
-			if (binary1[i] == 1 || binary2[i] == 1) newBi[i] = 1;
-			
 		}
-		int result = 0, mul = 1;
-		for (int i = n-1; i >= 0; i--) {
-			result += newBi[i]*mul;
-			mul *= 2;
+		for (int j = 0; j < n; j++) {
+			if (binary1[j] || binary2[j]) newBi[j] = true;
+			else newBi[j] = false;
 		}
-		answer[k] = result;
+		string line;
+		for (int j = 0; j < n; j++) { 
+			if (newBi[j]) line.push_back('#');
+			else line.push_back(' ');
+		}
+		answer.push_back(line);
 	}
 	return answer;
+}
+int main() {
+	int n = 5;
+	vector<int> v1;
+	vector<int> v2;
+
+	v1.push_back(27);
+	v1.push_back(3);
+	v1.push_back(23);
+	v1.push_back(1);
+	v1.push_back(21);
+
+	v2.push_back(3);
+	v2.push_back(23);
+	v2.push_back(28);
+	v2.push_back(3);
+	v2.push_back(21);
+
+	vector<string> v = solution(n,v1,v2);
+	for (string line : v) {
+		cout << line << endl;
+	}
+	return 0;
 }
