@@ -16,6 +16,7 @@ int main() {
 	vector<pair<int, string>> person;
 	int age;
 	string name;
+    
 	for (int i = 0; i < n; i++) {
 		cin >> age >> name;
 		person.push_back(make_pair(age, name));
