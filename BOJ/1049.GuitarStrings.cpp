@@ -1,19 +1,15 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 int checkCost(int n, int minEachCost, int minPackCost) {
 	int minCost = 100001;
-	 
+
 	int a = n * minEachCost;
 	int b = (n / 6) * minPackCost + (n % 6) * minEachCost;
 	int c = (n / 6 + 1) * minPackCost;
 
-	if (minCost > a) minCost = a;
-	if (a > b) minCost = b;
-	if (b > c) minCost = c;
-
-	return minCost;
-
+	return min(minCost, min(a, min(b, c)));
 }
 
 int main()
