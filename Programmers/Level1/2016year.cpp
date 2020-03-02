@@ -9,6 +9,7 @@ string solution(int a, int b) {
 
 	return answer[ (month[a - 1] + b) % 7 ];
 }
+
 int main() {
 	int a, b;
 	cin >> a >> b;
