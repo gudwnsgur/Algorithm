@@ -2,24 +2,25 @@
 using namespace std;
 
 int solution(int n) {
-	if (n == 0 || n == 1) return 0;
+    int count = 0;
+    bool* prime = new bool[n + 1];
+    for (int i = 0; i <= n; i++) {
+        prime[i] = true;
+    }
 
-	int cnt = 0;
-	bool* primeNumber = new bool[n + 1];
-	for (int i = 2; i <= n; i++) {
-		primeNumber[i] = true;
-	}
-	for (int i = 2; i <= n; i++) {
-		if (primeNumber[i]) {
-			for (int j = i * i; j <= n; j += i)
-				primeNumber[j] = false;
-		}
-	}
-	for (int i = 2; i <= n; i++) {
-		if (primeNumber[i]) cnt++;
-	}
-	return cnt;
+    for (int i = 2; i*i <= n; i++) {
+        if (prime[i]) {
+            for (int j = i * i; j <= n; j += i) {
+                prime[j] = false;
+            }
+        }
+    }
+    for (int i = 2; i <= n; i++) {
+        if (prime[i]) count++;
+    }
+    return count;
 }
+
 
 int main() {
 	int num;
