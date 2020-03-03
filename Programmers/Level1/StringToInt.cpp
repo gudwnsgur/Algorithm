@@ -8,5 +8,7 @@ int solution(string s) {
     
 	stringstream ss(s);
 	ss >> answer;
+    //same as :  answer=stoi(s);
+
 	return answer;
 } 
