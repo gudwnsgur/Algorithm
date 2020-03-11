@@ -4,31 +4,20 @@
 #include <iostream>
 using namespace std;
 
-bool cmp(string a, string b) {
-	return a + b > b + a;
+bool cmp(int a, int b) {
+	return stoi(to_string(a) + to_string(b)) > stoi(to_string(b) + to_string(a));
 }
-
 string solution(vector<int> numbers) {
 	string answer = "";
-	vector<string> v;
+	sort(numbers.begin(), numbers.end(), cmp);
+	
 	for (int i = 0; i < numbers.size(); i++) {
-		v.push_back(to_string(numbers[i]));
+		answer += to_string(numbers[i]);
 	}
-
-	sort(v.begin(), v.end(), cmp);
-
-	for (int i = 0; i < v.size(); i++) {
-		answer += v[i];
-	}
-	return answer[0] == '0' ? 0 : answer;
+	return answer;
 }
-
-// Test
 int main() {
-	vector<int> n = { 0 };
-	cout << solution(n);
+	vector<int> v = {30, 35, 3, 5 };
+	cout << solution(v);
 	return 0;
 }
-
-
- 
