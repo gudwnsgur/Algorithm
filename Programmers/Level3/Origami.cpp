@@ -1,21 +1,41 @@
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <queue>
+#include <iostream>
 using namespace std;
 
-vector<int> solution(int n)
+
+int solution(vector<int> priorities, int location)
 {
-	vector<int> answer;
-	vector<pair<int, string>> dp;
+	int answer = 0;
+	priority_queue<int> pq;
+	queue<pair<int, int>> q;
 
-	string str = "0";
-	dp.push_back(make_pair(1, "0"));    // n=1 초기화
+	for (int i = 0; i < priorities.size(); i++) {
+		pq.push(priorities[i]);
+		q.push(make_pair(priorities[i], i));
+	}
+	while (!q.empty()) {
+		int i = q.front().first;
+		int p = q.front().second;
+		q.pop();
 
-	for (int i = 2, j=2; i <= n; i++, j*=2) {
-		str = dp.back().second + '0' + dp.back().second;
-		str[j / 2 + j -1] = '1';
-		dp.push_back(make_pair(i, str));
-	} // n-1 값 이용
-    
-	for (int i = 0; i < str.size(); i++) answer.push_back(str[i] - 48);
+		if (p == pq.top()) {
+			pq.pop();
+			answer += 1;
+			if (i == location) break;
+		}
+		else q.push(make_pair(i, p));
+
+	}
 	return answer;
+
+}
+
+int main() {
+	vector<int> a = { 2,1,3,2 };
+	vector<int> b = { 1,1,9,1,1,1,1 };
+	cout << solution(b, 2);
+	return 0;
 }
