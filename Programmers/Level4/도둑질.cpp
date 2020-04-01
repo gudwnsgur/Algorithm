@@ -11,26 +11,28 @@ int solution(vector<int> money)
 	if (money.size() == 1) return money.back();
 	if (money.size() == 2) return max(money[0], money[1]);
 	// 1 2 3 
+	
+	// 첫집을 훔치는 경우
 	first_dp[0] = money[0];
-	first_dp[1] = money[1];
-	first_dp[2] = money[0] + money[2];
+	first_dp[1] = money[0];
 
-
+	// 첫집을 훔치지 않는 경우 (마지막 집을 훔칠 수 있음)
+	// last_dp[0]=0
 	last_dp[1] = money[1];
-	last_dp[2] = max(money[1], money[2]);
 
 
-	for (int i = 3; i < money.size() - 1; i++) {
-		first_dp[i] = max(first_dp[i - 3], first_dp[i - 2]) + money[i];
+	for (int i = 2; i < money.size() - 1; i++) {
+		first_dp[i] = max(first_dp[i - 2] + money[i], first_dp[i - 1]);
 	}
-	for (int i = 3; i < money.size(); i++) {
-
-		last_dp[i] = max(last_dp[i - 3], last_dp[i - 2]) + money[i];
+	for (int i = 2; i < money.size(); i++) {
+		last_dp[i] = max(last_dp[i - 2]+money[i], last_dp[i-1]);
 	}
 
 
 	return max(first_dp[money.size() - 2], last_dp[money.size() - 1]);
 }
+
+// testCase
 int main() {
 	cout << solution({ 1,2,5,2,3,6,10,2,3 });
 	return 0;
