@@ -63,6 +63,7 @@ int main() {
 			if (line[j] == '1') map[i][j] = true;
 		}
 	} // map 초기화
+    
 	curQ.push(make_pair(0, 0));
 	visited[0][0] = true;
 	bfs(n-1, m-1);
