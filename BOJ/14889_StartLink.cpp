@@ -9,10 +9,9 @@ bool team[21] = { false , };
 bool visited[21] = { false, };
 
 void checkMin(int n) {
-
 	int teamStark = 0, teamLink = 0;
-	for (int i = 1; i <= n; i++) {
-		for (int j = 1; j <= n; j++) {
+	for (int i = 1; i <= n-1; i++) {
+		for (int j = i+1; j <= n; j++) {
 			if (team[i] && team[j]) teamStark += (ability[i][j] + ability[j][i]);
 			else if (!team[i] && !team[j]) teamLink += (ability[i][j] + ability[j][i]);
 		}
@@ -23,9 +22,8 @@ void checkMin(int n) {
 void dfs(int length, int n) {
 	if (length == n / 2 && stark[0] == 1) {
 		for (int i = 0; i < n / 2; i++) {
-			cout << stark[i] << ' '; 
 			team[stark[i]] = true;
-		}cout << endl;
+		}
 		checkMin(n);
 		for (int i = 1; i <= n; i++) team[i] = false;
 		return;
