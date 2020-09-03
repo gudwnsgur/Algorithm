@@ -1,11 +1,66 @@
-// 시간 초과
 #include <iostream>
-#include <queue>
 #include <vector>
+#include <queue>
 #include <algorithm>
 #include <functional>
 #define endl '\n'
 using namespace std;
+
+int dp[1001];
+int time[1001] = { 0, }; // i번째 건물을 짓는 소요시간
+vector<int> graph[1001];
+
+
+int solution(int p) {
+	if (dp[p] > -1) return dp[p];	// 
+
+	int maxTime = 0;
+	for (int i = 0; i<graph[p].size(); i++) {
+		if (dp[graph[p][i]] == -1) solution(graph[p][i]);
+		maxTime = max(maxTime, dp[graph[p][i]]);
+	}
+	dp[p] = maxTime + time[p];
+	return dp[p];
+}
+
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+
+	int testCase;
+	cin >> testCase; 
+	for (int t = 0; t < testCase; t++) {
+		int v, e; 
+		cin >> v >> e; // 정점, 간선 입력
+
+		for (int i = 1; i <= v; i++) {
+			dp[i] = -1;
+			cin >> time[i];
+		}
+
+		for (int i = 0; i < e; i++) {
+			int x, y;
+			cin >> x >> y;	// graph 입력
+			graph[y].push_back(x);
+		}
+
+		int start;
+		cin >> start;	// 시작점
+		cout << solution(start) << endl;
+
+		for (int i = 1; i <= v; i++) graph[i].clear();
+	}
+
+
+	return 0;
+}
+
+
+/*
+시간 초과 코드 
+
 
 int x, y; // x -> y
 int endPoint, maxTime = 0;
@@ -57,3 +112,4 @@ int main() {
 	}
 	return 0;
 } 
+*/
