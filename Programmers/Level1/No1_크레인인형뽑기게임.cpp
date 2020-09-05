@@ -26,5 +26,4 @@ int solution(int n, vector<int> lost, vector<int> reserve) {
 		if (std[i] != -1) answer++;
 	}
 	return answer;
-
 }
