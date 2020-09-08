@@ -12,7 +12,7 @@ int solution(vector<vector<int>> board)
 
 	int cnt = 0;
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < m; j++) {
 			if (board[i][j]) cnt++;
 		}
 	}
@@ -20,7 +20,7 @@ int solution(vector<vector<int>> board)
 
 	int maxNum = 1;
 	for (int i = 1; i <n; i++) {
-		for (int j = 1; j < n; j++) {
+		for (int j = 1; j < m; j++) {
 			if (board[i][j] && board[i - 1][j - 1] && board[i][j - 1] && board[i - 1][j]) {
 				board[i][j] = min(board[i - 1][j - 1], min(board[i][j - 1], board[i - 1][j])) + 1;
 				maxNum = max(maxNum, board[i][j]);
