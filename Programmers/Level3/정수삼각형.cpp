@@ -1,17 +1,14 @@
-#include <iostream>
-#include <algorithm>
+#include <string>
+#include <vector>
+
 using namespace std;
 
 int dp[501][501]{ 0, };
-int triangle[501][501]{ 0, };
 
-int main() {
-	int n;
-	cin >> n;
-
-	for (int i = 0; i < n; i++) { 
-		for (int j = 0; j <= i; j++) { 
-			cin >> triangle[i][j];
+int solution(vector<vector<int>> triangle) 
+{
+    for(int i=0; i<triangle.size() ; i++) {
+        for (int j = 0; j <= i; j++) { 
 
 			if (i == 0) dp[0][0] = triangle[0][0];
 			else {
@@ -22,14 +19,10 @@ int main() {
 				}
 			}
 		}
-	}
-	int cost = -1;
-	for (int i = 0; i < n; i++) 
-		cost = max(cost, dp[n - 1][i]);
-	cout << cost;
-
-	return 0;
+    }
+    int cost = -1;
+	for (int i = 0; i < triangle.size(); i++) 
+		cost = max(cost, dp[triangle.size() - 1][i]);
+    
+    return cost;
 }
-
-
-
