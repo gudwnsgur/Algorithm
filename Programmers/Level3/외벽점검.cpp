@@ -20,8 +20,7 @@ void dfs(int length, int n, int node) {
 		for (int i = 0; i < n; i++) d.push_back(arr[i]);
 		int vIndex = 0, dIndex = 0, curCnt = 0;
 
-		for (; vIndex < v.size() && dIndex < dists.size(); dIndex++) {
-			curCnt++;
+		for (; vIndex < v.size() && dIndex < dists.size(); dIndex++, curCnt++) {
 			node += d[dIndex];
 			while (vIndex < v.size() && node >= v[vIndex]) vIndex++;
 			node = v[vIndex];
@@ -54,6 +53,6 @@ int solution(int n, vector<int> weak, vector<int> dist) {
 		dfs(0, dist.size(), node);
 	}
 	cout << "DFS : " << dfsCnt << endl;
-	if (impossible == dist.size()) return -1;
+	if (impossible == dfsCnt) return -1;
 	return answer;
 }
