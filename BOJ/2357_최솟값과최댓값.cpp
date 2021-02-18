@@ -32,3 +32,26 @@ pair<int, int> getNum(int node, int s, int e, int left, int right) {
 	return{ (a.first < b.first ? a.first : b.first) , (a.second > b.second ? a.second : b.second) };
 }
 
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> n >> m;
+	arr = vector<int>(n + 1);
+	tree = vector<pair<int, int>>(1 << ((int)ceil(log2(n)) + 1));
+
+	for (int i = 1; i <= n; i++) {
+		cin >> arr[i];
+	}
+	initTree(1, 1, n);
+
+
+	int left, right;
+	for (int i = 0; i < m; i++) {
+		cin >> left >> right;
+		pair<int, int> res = getNum(1, 1, n, left, right);
+		cout << res.first << ' ' << res.second << endl;
+	}
+	return 0;
+}
