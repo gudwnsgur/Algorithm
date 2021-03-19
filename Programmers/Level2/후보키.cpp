@@ -1,84 +1,77 @@
 #include <string>
 #include <vector>
+#include <set>
 #include <iostream>
-#include <algorithm>
 using namespace std;
 
-string relations[20][9] = {"",};
-bool visited[9] = { false , };
-bool candidated[8889]; 	// candidated[abcd] : (a,b,c,d) = 후보키
-int arr[9];
-int n, m, result = 0;
+int cnt = 0;
+vector<int> rel, arr; 
+vector<bool> visited;
+vector<string> result;
+vector<vector<string>> relations;
+// 0 1 2 3
 
-bool checkCandidate(int length) {
-	int number = 0;
-
-	// candidate 될수 있으면 arr로 candidate[arr] = true 시키고 return true;
-	// 될수없으면 false;
-	if (arr[0] == 2 && arr[1] == 3) return true;
-	return false;
+bool minimality(string str) {
+	// result(이전까지 모은 속성) 와 str 비교
+	for (int i = 0; i < result.size(); i++) {
+		// result[i] == AB   str == AC ABC ADE ABCD DE
+		int  cnt = 0;
+		for (int j = 0; j < result[i].size(); j++) {
+			for (int k = 0; k < str.size(); k++) {
+				if (result[i][j] == str[k]) cnt++;
+			}
+		}
+		if (cnt == result[i].size()) return false;
+	}
+	return true;
+}
+bool uniqueness() {
+	set<vector<string>> s;
+	vector<string> tmp;
+	for (int i = 0; i < relations.size(); i++) {
+		tmp.clear();
+		for (int j = 0; j < arr.size(); j++) {
+			tmp.push_back(relations[i][arr[j]]);
+		}
+		if (s.find(tmp) != s.end()) return false;
+		s.insert(tmp);
+	}
+	return true;
 }
 
-void dfs(int length, int cnt) {
-	if (length == cnt) {
-		int number = 0;
-		for (int i = 0; i < length; i++) {
-			cout << arr[i] << ' ';
-		}cout << endl;
-		if (length == 2 && checkCandidate(2)) {
-			candidated[arr[1] * 10 + arr[0]] = true;
-			result++;
-		}
-		else {
-			vector<int> v;
+void dfs(int length, int n, int m) {
+	if (length == m) {
+		if (!uniqueness()) return;
+		string str = "";
+		for (int i = 0; i < arr.size(); i++) str.push_back(arr[i] + 65);
+		
+		if (result.empty() || minimality(str)) {
+			cout << str << ' ';
+			cnt++;
+			result.push_back(str);
 		}
 		return;
 	}
-	for (int i = 1; i <= m; i++) {
-		if (length != 0 && arr[length - 1] >= i);
-		else if (!visited[i] && !candidated[i]) {
-			visited[i] = true;
-			arr[length] = i;
-			dfs(length + 1, cnt);
-			visited[i] = false;
-		}
-	}
-}
-
-int solution(vector<vector<string>> relation) {
-	n = relation.size();
-	m = relation[0].size();
-	for (int i = 1; i <= m; i++) candidated[i] = true;
 
 	for (int i = 0; i < n; i++) {
-		for (int j = 1; j <= m; j++) {
-			relations[i][j] = relation[i][j-1];
-		}
-	}
-	for (int i = 1; i <= m; i++) {
-		for (int j = 0; j < n-1; j++) {
-			if (!candidated[i]) break;
-			for (int k = j + 1; k < n; k++) {
-				if (!relations[j][i].compare(relations[k][i])) {
-					candidated[i] = false;
-					break;
-				}
+		if (!visited[i]) {
+			if (length == 0 || (length != 0 && arr[length - 1] < rel[i])) {
+				arr[length] = rel[i];
+				visited[i] = true;
+				dfs(length + 1, n, m);
+				visited[i] = false;
 			}
 		}
 	}
-	for (int i = 1; i <= m; i++) if (candidated[i]) result++; // 후보키 하나일때
-
-	for (int i = 2; i <= m; i++) {
-		int cnt = 0;
-		for (int j = 1; j <= m; j++) {
-			if (!candidated[j]) cnt++;
-		}
-		if (cnt >= i) dfs(0, i);
-	}
-
-	return result;
 }
-int main() {
+int solution(vector<vector<string>> relation) {
+	relations = relation;
+	for (int i = 0; i < relation[0].size(); i++) rel.push_back(i);
 
-	return 0;
+	for (int i = 1; i <= rel.size() ; i++) {
+		arr = vector<int>(i);
+		visited = vector<bool>(rel.size(), false);
+		dfs(0, rel.size(), i);
+	}
+	return cnt;
 }
