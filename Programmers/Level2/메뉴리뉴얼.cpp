@@ -1,86 +1,88 @@
 #include <string>
 #include <vector>
-#include <algorithm>
 #include <iostream>
+#include <set>
+#include <algorithm>
+#define endl '\n'
 using namespace std;
 
-vector<char> ch;
-vector<string> answer, order;
-vector<pair<string, int>> ans;
-vector<int> courses, arr;
+set<char> s;
+vector<char> menu, arr;
 vector<bool> visited;
+vector<string> order;
+vector<string> answer;
+vector<pair<int, string>> ans;
 
-int promise() {
+
+
+int count() {
 	int cnt = 0;
-	// arr에 담긴 index로 ch에서 뽑아서 order에 몇개가 있는지 확인
 	for (int i = 0; i < order.size(); i++) {
-		int length = arr.size();
+		int curCnt = 0;
 		for (int j = 0; j < order[i].size(); j++) {
 			for (int k = 0; k < arr.size(); k++) {
-				if (ch[arr[k]] == order[i][j]) length--;
+				if (order[i][j] == arr[k]) curCnt++;
 			}
 		}
-		if (length == 0) cnt++;
+		if (curCnt == arr.size()) cnt++;
 	}
 	return cnt;
 }
-void dfs(int length, int n, int r) {
-	if (length == r) {
-		int cnt = promise();
-		if (cnt >= 2) {
-			string str = "";
-			for (int i = 0; i < arr.size(); i++) {
-				str.push_back(ch[arr[i]]);
-			}
-			ans.push_back({ str, cnt });
-		}
+
+void dfs(int length, int n, int m) {
+	if (length == m) {
+		string str = "";
+		for (int i = 0; i < length; i++) str.push_back(arr[i]);
+		int cnt = count();
+
+		if(cnt != 0 && cnt != 1) ans.push_back({ cnt, str });
 		return;
 	}
+	
 	for (int i = 0; i < n; i++) {
 		if (!visited[i]) {
-			if (length == 0 || (length != 0 && arr[length - 1] < i)) {
+			if (length == 0 || (length != 0 && arr[length - 1] < menu[i])) {
+				arr[length] = menu[i];
 				visited[i] = true;
-				arr[length] = i;
-				dfs(length + 1, n, r);
+				dfs(length + 1, n, m);
 				visited[i] = false;
 			}
 		}
 	}
 }
 
-bool compare(pair<string, int> a, pair<string, int> b) {
-	if (a.first.size() == b.first.size()) return a.second > b.second;
-	return a.first.size() < b.first.size();
+bool compare(pair<int, string> a, pair<int, string> b) {
+	if (a.first == b.first) return a.second < b.second;
+	return a.first > b.first;
 }
 
 vector<string> solution(vector<string> orders, vector<int> course) {
-
 	order = orders;
-	courses = course;
-
 	for (int i = 0; i < orders.size(); i++) {
 		for (int j = 0; j < orders[i].size(); j++) {
-			ch.push_back(orders[i][j]);
+			if (s.find(orders[i][j]) != s.end()) continue;
+
+			s.insert(orders[i][j]);
+			menu.push_back(orders[i][j]);
 		}
 	}
-	sort(ch.begin(), ch.end());
-	ch.erase(unique(ch.begin(), ch.end()), ch.end());
-
+	// menu : A B C D E F G H
 
 	for (int i = 0; i < course.size(); i++) {
-		arr = vector<int>(course[i], 0);
-		visited = vector<bool>(course[i], false);
+		ans.clear();
+		arr = vector<char>(course[i]);
+		visited = vector<bool>(menu.size());
 
-		dfs(0, ch.size(), course[i]);
-	}
-	sort(ans.begin(), ans.end(), compare);
-	int curCnt = 0;
+		dfs(0, menu.size(), course[i]);
+		
+		if (ans.empty()) continue;
 
-	for (int i = 0; i < ans.size(); i++) {
-		if (i == 0 || (i != 0 && ans[i - 1].first.size() != ans[i].first.size())) {
-			curCnt = ans[i].second;
+		sort(ans.begin(), ans.end(), compare);
+		int curMax = ans[0].first;
+		answer.push_back(ans[0].second);
+		for (int i = 1; i < ans.size(); i++) {
+			if (ans[i].first == curMax) answer.push_back(ans[i].second);
 		}
-		if (ans[i].second == curCnt) answer.push_back(ans[i].first);
 	}
 	sort(answer.begin(), answer.end());
 	return answer;
