@@ -6,7 +6,6 @@ class Solution {
     int erasedRock(int mid) {
         int cnt = 0;
         int curDist;
-        System.out.println("Mid : " + mid);
         for(int i=0; i<diff.length; i++) {
             if(diff[i] >= mid) continue;
 
@@ -37,8 +36,9 @@ class Solution {
 
         while(left <= right) {
             int mid = (left+right)/2;
-            int erased = erasedRock(mid);
 
+            int erased = erasedRock(mid);
+            System.out.println(left + " " + mid + " " + right + " : " + erased);
 
             if(erased > n) right = mid-1;
             else {
@@ -54,7 +54,7 @@ class Main {
     public static void main(String[] args) {
         int[] a = {2,14,11,21,17};
         Solution s = new Solution();
-        System.out.println(s.solution(25, a, 2));
+        System.out.println(s.solution(25, a, 5));
 
     }
 }
