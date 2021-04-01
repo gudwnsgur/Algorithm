@@ -1,7 +1,7 @@
 import java.util.*;
 
 class Solution {
-    boolean[][] edges;
+    ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
     int [] result;
     boolean[] visited;
 
@@ -17,11 +17,11 @@ class Solution {
             length++;
             for(int i=0; i<size; i++) {
                 int node = queue.element();
-                for(int j=2; j<=n; j++) {
-                    if(!visited[j] && edges[node][j]) {
-                        visited[j] = true;
-                        queue.add(j);
-                        result[j] = length;
+                for(int j=0; j<graph.get(node).size(); j++) {
+                    if(!visited[graph.get(node).get(j)]) {
+                        visited[graph.get(node).get(j)] = true;
+                        queue.add(graph.get(node).get(j));
+                        result[graph.get(node).get(j)] = length;
                     }
                 }
                 queue.remove();
@@ -30,16 +30,17 @@ class Solution {
         return length-1;
     }
 
-
     public int solution(int n, int[][] edge) {
-        edges = new boolean[n+1][n+1];
-        for(int i=0; i<edge.length; i++) {
-            edges[edge[i][0]][edge[i][1]] = true;
-            edges[edge[i][1]][edge[i][0]] = true;
-        }
+        for(int i=0; i<=n; i++) graph.add(new ArrayList<>());
         result = new int[n+1];
-        for(int i=2; i<=n; i++) result[i] = n;
         visited = new boolean[n+1];
+
+        for(int i=0; i<edge.length; i++) {
+            graph.get(edge[i][0]).add(edge[i][1]);
+            graph.get(edge[i][1]).add(edge[i][0]);
+        }
+
+        for(int i=1; i<=n; i++) result[i] = n;
 
         int maxLen = bfs(n);
         int cnt = 0;
