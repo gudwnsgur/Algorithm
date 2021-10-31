@@ -12,6 +12,7 @@ class Jewelry {
 }
 class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    
     static StringTokenizer tk;
     static int n, k;
     static long result = 0;
