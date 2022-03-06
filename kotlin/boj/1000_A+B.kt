@@ -6,4 +6,4 @@ fun main(args: Array<String>) {
     val tk = StringTokenizer(br.readLine())
     println(Integer.parseInt(tk.nextToken()) + Integer.parseInt(tk.nextToken()))
 }
- 
+  
